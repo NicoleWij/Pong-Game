@@ -57,12 +57,15 @@ This is a classic Pong game built in Python using the `pygame` library. It featu
 ## Project Structure
 ```bash
 pong-game-python/
-├── main.py          # Main game loop and logic
-├── paddle.py        # Paddle class
-├── ball.py          # Ball class
-├── menu.py          # Menu class
-├── game_over.py     # GameOver class
-└── README.md        # Project description
+├── src/
+│   ├── main.py          # Main game loop
+│   ├── paddle.py        # Paddle class 
+│   ├── ball.py          # Ball class 
+│   ├── menu.py          # Menu class
+│   ├── game_over.py     # GameOver class 
+├── README.md            
+└── .gitignore           
+
 ```
 
 ## Future Improvements

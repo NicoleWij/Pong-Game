@@ -43,6 +43,10 @@ class GameOver:
     def get_choice(self, winner, winner_hits):
         while True:
             self.draw(winner, winner_hits)  # Draw with winner and winner_hits
+
+            # Base y position starts after all the texts above
+            base_y = self.height // 6 + 100 + 80 + 100  # Match the y-spacing in draw()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -52,6 +56,6 @@ class GameOver:
                     for index, option in enumerate(self.options):
                         text = self.options_font.render(option, True, (255, 255, 255))
                         x = (self.width - text.get_width()) // 2
-                        y = self.height // 2 + index * 100
+                        y = base_y + index * 100  # Proper y alignment for menu options
                         if x <= mouse_x <= x + text.get_width() and y <= mouse_y <= y + text.get_height():
                             return option
