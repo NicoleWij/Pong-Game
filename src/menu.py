@@ -1,5 +1,6 @@
 import pygame
 import sys
+import os
 from starfield import update_starfield, draw_starfield
 
 class Menu:
@@ -7,7 +8,14 @@ class Menu:
         self.screen = screen
         self.width = width
         self.height = height
-        self.font = pygame.font.SysFont("Arial", 64)
+        
+        # Get the absolute path to the font file
+        base_dir = os.path.dirname(__file__)  # Directory of the current script
+        print(base_dir)
+        font_path = os.path.join(base_dir, "../assets/Extrude.ttf")
+        
+        
+        self.font = pygame.font.Font(font_path, 64)
         self.options = ["START GAME", "QUIT"]
         self.clock = pygame.time.Clock()
 

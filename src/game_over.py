@@ -1,5 +1,6 @@
 import pygame
 import sys
+import os
 from starfield import update_starfield, draw_starfield
 
 class GameOver:
@@ -7,8 +8,14 @@ class GameOver:
         self.screen = screen
         self.width = width
         self.height = height
-        self.font = pygame.font.SysFont("Arial", 64)
-        self.options_font = pygame.font.SysFont("Arial", 48)
+        
+        # Get the absolute path to the font file
+        base_dir = os.path.dirname(__file__)  # Directory of the current script
+        font_path = os.path.join(base_dir, "../assets/Extrude.ttf")
+        
+        
+        self.font = pygame.font.Font(font_path, 64)
+        self.options_font = pygame.font.Font(font_path, 34)
         self.options = ["RESTART GAME", "QUIT"]
         self.clock = pygame.time.Clock()
 
@@ -24,20 +31,20 @@ class GameOver:
         self.screen.blit(game_over_text, (x, y))
 
         # Winner text
-        winner_text = self.font.render(f"The winner is {winner}!", True, (255, 255, 0))  # Yellow text
+        winner_text = self.options_font.render(f"The winner is {winner}!", True, (255, 255, 0))  # Yellow text
         x = (self.width - winner_text.get_width()) // 2
         y += 100  # Add spacing below "GAME OVER"
         self.screen.blit(winner_text, (x, y))
 
         # Winner hits text
-        hits_text = self.font.render(f"You hit the ball a total of {winner_hits} times!", True, (255, 255, 255))
+        hits_text = self.options_font.render(f"You hit the ball a total of {winner_hits} times!", True, (255, 255, 255))
         x = (self.width - hits_text.get_width()) // 2
         y += 80  # Add spacing below "The winner is"
         self.screen.blit(hits_text, (x, y))
 
         # Draw options
         for index, option in enumerate(self.options):
-            text = self.options_font.render(option, True, (255, 255, 255))  # White text
+            text = self.font.render(option, True, (255, 255, 255))  # White text
             x = (self.width - text.get_width()) // 2
             y += 100  # Add spacing for menu options
             self.screen.blit(text, (x, y))
@@ -56,7 +63,7 @@ class GameOver:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     for index, option in enumerate(self.options):
-                        text = self.options_font.render(option, True, (255, 255, 255))
+                        text = self.font.render(option, True, (255, 255, 255))
                         x = (self.width - text.get_width()) // 2
                         y = base_y + index * 100
                         if x <= mouse_x <= x + text.get_width() and y <= mouse_y <= y + text.get_height():
