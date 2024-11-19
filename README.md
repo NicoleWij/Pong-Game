@@ -7,6 +7,9 @@ This is a classic Pong game built in Python using the `pygame` library. It featu
 - **Game Over Screen**: Displays the winner and the total number of hits made by the winner.
 - **Restart or Quit**: Players can restart the game or exit after the game ends.
 
+## Demo
+![Game Demo](./media/gameplay.gif)
+
 ## Features
 1. **Main Menu**:
    - Options: "Start Game" and "Quit".
