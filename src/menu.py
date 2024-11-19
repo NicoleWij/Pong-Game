@@ -4,11 +4,12 @@ import os
 from starfield import update_starfield, draw_starfield
 
 class Menu:
-    def __init__(self, screen, width, height):
+    def __init__(self, screen, width, height, custom_mouse):
         self.screen = screen
         self.width = width
         self.height = height
-        
+        self.custom_mouse = custom_mouse  # Add the custom mouse instance
+
         # Get the absolute path to the font file
         base_dir = os.path.dirname(__file__)
         font_path = os.path.join(base_dir, "../assets/Extrude.ttf")
@@ -36,6 +37,7 @@ class Menu:
             y = self.height // 3 + index * 100
             self.screen.blit(text, (x, y))
 
+        self.custom_mouse.draw(self.screen)  # Draw the custom mouse cursor
         pygame.display.flip()
 
     def get_choice(self):

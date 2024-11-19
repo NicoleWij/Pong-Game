@@ -1,10 +1,12 @@
 import pygame
 import sys
+import os
 from paddle import Paddle
 from ball import Ball
 from menu import Menu
 from game_over import GameOver
 from starfield import update_starfield, draw_starfield
+from mouse import Mouse  # Import the Mouse class
 
 pygame.init()
 
@@ -20,9 +22,14 @@ pygame.display.set_caption("PONG")
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("Arial", FONT_SIZE)
 
-# Initialize Menu and GameOver
-menu = Menu(screen, WIDTH, HEIGHT)
-game_over_screen = GameOver(screen, WIDTH, HEIGHT)
+# Initialize custom mouse cursor
+base_dir = os.path.dirname(__file__)
+cursor_path = os.path.join(base_dir, "../assets/star_cursor.xpm")  # Use the .xpm file
+custom_mouse = Mouse(base_dir, "../assets/star_cursor.xpm")  # Pass directory and filename to Mouse
+
+# Initialize Menu and GameOver with the custom mouse
+menu = Menu(screen, WIDTH, HEIGHT, custom_mouse)
+game_over_screen = GameOver(screen, WIDTH, HEIGHT, custom_mouse)
 
 def game_loop():
     # Initialize paddles, ball, and hit counters
@@ -66,6 +73,10 @@ def game_loop():
         paddle1.draw(screen)
         paddle2.draw(screen)
         ball.draw(screen)
+
+        # Draw custom mouse cursor
+        custom_mouse.draw(screen)
+
         pygame.display.flip()  # Update the display
 
         # Control frame rate

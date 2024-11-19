@@ -4,10 +4,11 @@ import os
 from starfield import update_starfield, draw_starfield
 
 class GameOver:
-    def __init__(self, screen, width, height):
+    def __init__(self, screen, width, height, custom_mouse):
         self.screen = screen
         self.width = width
         self.height = height
+        self.custom_mouse = custom_mouse  # Add the custom mouse instance
 
         # Get the absolute path to the font file
         base_dir = os.path.dirname(__file__)  # Directory of the current script
@@ -32,13 +33,13 @@ class GameOver:
         self.screen.blit(game_over_text, (x, y))
 
         # Winner text
-        winner_text = self.options_font.render(f"The winner is {winner}!", True, (255, 255, 0))  # Yellow text
+        winner_text = self.options_font.render(f"The winner is {winner}!", True, (255, 252, 79)) 
         x = (self.width - winner_text.get_width()) // 2
         y += 100  # Add spacing below "GAME OVER"
         self.screen.blit(winner_text, (x, y))
 
         # Winner hits text
-        hits_text = self.options_font.render(f"You hit the ball a total of {winner_hits} times!", True, (255, 255, 0))
+        hits_text = self.options_font.render(f"You hit the ball a total of {winner_hits} times!", True, (255, 252, 79))
         x = (self.width - hits_text.get_width()) // 2
         y += 80  # Add spacing below "The winner is"
         self.screen.blit(hits_text, (x, y))
@@ -54,6 +55,7 @@ class GameOver:
             y += 100  # Add spacing for menu options
             self.screen.blit(text, (x, y))
 
+        self.custom_mouse.draw(self.screen)  # Draw the custom mouse cursor
         pygame.display.flip()
 
     def get_choice(self, winner, winner_hits):
@@ -81,5 +83,4 @@ class GameOver:
                     if hovered_index is not None:
                         return self.options[hovered_index]  # Return the selected option
 
-            # Control frame rate
             self.clock.tick(60)
