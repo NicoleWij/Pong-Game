@@ -44,7 +44,7 @@ def game_loop():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        
+
         # Update
         update_starfield()
 
@@ -54,12 +54,10 @@ def game_loop():
         ball.move()
 
         # Check for collisions and update hit counters
-        if ball.rect.colliderect(paddle1.rect):
-            ball.speed_x = -ball.speed_x  # Reverse ball direction
-            player1_hits += 1            # Increment Player 1's hit count
-        elif ball.rect.colliderect(paddle2.rect):
-            ball.speed_x = -ball.speed_x  # Reverse ball direction
-            player2_hits += 1            # Increment Player 2's hit count
+        if paddle1.handle_collision(ball, pygame.K_w, pygame.K_s):
+            player1_hits += 1
+        elif paddle2.handle_collision(ball, pygame.K_UP, pygame.K_DOWN):
+            player2_hits += 1
 
         # Check for losing condition (ball out of bounds)
         if ball.rect.left <= 0:
@@ -81,7 +79,6 @@ def game_loop():
 
         # Control frame rate
         clock.tick(60)
-
 
 def main():
     while True:
