@@ -21,10 +21,13 @@ class Ball:
         self.rect.y += self.speed_y
 
         # Bounce off top and bottom walls
-        if self.rect.top <= 0 or self.rect.bottom >= self.screen_height:
+        if self.rect.top <= 0:
+            self.rect.top = 0  # Prevent overlapping the top boundary
             self.speed_y = -self.speed_y
-
-        # Increment angle for rotation
+        elif self.rect.bottom >= self.screen_height:
+            self.rect.bottom = self.screen_height  # Prevent overlapping the bottom boundary
+            self.speed_y = -self.speed_y
+    
         self.angle += 5  # Adjust rotation speed as needed
 
     def draw(self, screen):
