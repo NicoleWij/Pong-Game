@@ -69,8 +69,8 @@ pong-game-python/
 │   ├── mouse.py         # Custom mouse cursor behavior
 │   ├── paddle.py        # Paddle behavior, movement, and collision
 │   ├── starfield.py     # Starfield background animation
-├── assets/              # Contains game assets (images, fonts, etc.)
-├── media/               # Placeholder for additional media files (e.g., sounds)
+├── assets/              # Game assets (images, fonts, etc.)
+├── media/               # Additional media files (e.g., sounds, gifs)
 ├── README.md            # Project documentation
 └── .gitignore           # Git ignore file for unnecessary files
         
