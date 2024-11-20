@@ -61,13 +61,19 @@ This is a classic Pong game built in Python using the `pygame` library. It featu
 ```bash
 pong-game-python/
 ├── src/
-│   ├── main.py          # Main game loop
-│   ├── paddle.py        # Paddle class 
-│   ├── ball.py          # Ball class 
-│   ├── menu.py          # Menu class
-│   ├── game_over.py     # GameOver class 
-├── README.md            
-└── .gitignore           
+│   ├── ball.py          # Handles ball behavior, movement, and rotation
+│   ├── controls.py      # Displays the controls screen and animations
+│   ├── game.py          # Main game loop and overall logic
+│   ├── game_over.py     # GameOver screen functionality
+│   ├── menu.py          # Main menu and navigation options
+│   ├── mouse.py         # Custom mouse cursor behavior
+│   ├── paddle.py        # Paddle behavior, movement, and collision
+│   ├── starfield.py     # Starfield background animation
+├── assets/              # Contains game assets (images, fonts, etc.)
+├── media/               # Placeholder for additional media files (e.g., sounds)
+├── README.md            # Project documentation
+└── .gitignore           # Git ignore file for unnecessary files
+        
 
 ```
 
