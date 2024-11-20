@@ -6,7 +6,7 @@ from ball import Ball
 from menu import Menu
 from game_over import GameOver
 from starfield import update_starfield, draw_starfield
-from mouse import Mouse  # Import the Mouse class
+from mouse import Mouse
 
 pygame.init()
 
@@ -32,6 +32,7 @@ menu = Menu(screen, WIDTH, HEIGHT, custom_mouse)
 game_over_screen = GameOver(screen, WIDTH, HEIGHT, custom_mouse)
 
 def game_loop():
+    """Main game loop for PONG."""
     # Initialize paddles, ball, and hit counters
     paddle1 = Paddle(10, (HEIGHT - PADDLE_HEIGHT) // 2, PADDLE_WIDTH, PADDLE_HEIGHT, HEIGHT)
     paddle2 = Paddle(WIDTH - 20, (HEIGHT - PADDLE_HEIGHT) // 2, PADDLE_WIDTH, PADDLE_HEIGHT, HEIGHT)
@@ -81,19 +82,26 @@ def game_loop():
         clock.tick(60)
 
 def main():
+    """Main entry point for the PONG game."""
     while True:
+        # Display the main menu and get the user's choice
         choice = menu.get_choice()
+        
         if choice == "START GAME":
-            # Unpack only the two values returned by game_loop
+            # Start the game loop and get the game results
             winner, winner_hits = game_loop()
-            # Show the Game Over screen with the winner and their hit count
+
+            # Display the Game Over screen
             game_over_choice = game_over_screen.get_choice(winner, winner_hits)
+            
             if game_over_choice == "RESTART GAME":
                 continue  # Restart the loop, showing the main menu again
             elif game_over_choice == "QUIT":
                 pygame.quit()
                 sys.exit()
+        
         elif choice == "QUIT":
+            # Quit the game if the user selects Quit
             pygame.quit()
             sys.exit()
 
