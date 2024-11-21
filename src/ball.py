@@ -1,15 +1,18 @@
 import pygame
 import os
+import random
 
 class Ball:
     def __init__(self, x, y, size, speed_x, speed_y, screen_width, screen_height):
-        # Get the absolute path to the star file
-        base_dir = os.path.dirname(__file__)  # Directory of the current script
+        base_dir = os.path.dirname(__file__)
         star_path = os.path.join(base_dir, "../assets/star.png")
         
         self.rect = pygame.Rect(x, y, size, size)
-        self.speed_x = speed_x
-        self.speed_y = speed_y
+        
+        # Randomize direction for both x and y speeds
+        self.speed_x = speed_x if random.choice([True, False]) else -speed_x
+        self.speed_y = speed_y if random.choice([True, False]) else -speed_y
+        
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.image = pygame.image.load(star_path)  # Load the star image
@@ -28,7 +31,7 @@ class Ball:
             self.rect.bottom = self.screen_height  # Prevent overlapping the bottom boundary
             self.speed_y = -self.speed_y
     
-        self.angle += 5  # Adjust rotation speed as needed
+        self.angle += 5 
 
     def draw(self, screen):
         # Rotate the image
