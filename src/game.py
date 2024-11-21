@@ -38,7 +38,7 @@ pygame.mixer.music.set_volume(0.5)
 
 # Load and set up the ball hit sound effect
 ball_sound = pygame.mixer.Sound(ball_sound_path)
-ball_sound.set_volume(0.15)
+ball_sound.set_volume(0.3)
 
 # Load and set up the game over sound effect
 game_over_sound = pygame.mixer.Sound(game_over_path)

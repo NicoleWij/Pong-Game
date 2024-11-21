@@ -70,7 +70,7 @@ def show_controls(screen, clock, width, height, custom_mouse):
         screen.blit(arrow_images[state], (3 * width // 4 - arrow_images[state].get_width() // 2, 150))
 
         # Draw the instructions text
-        instructions_text = instruction_font.render("Press any key or click to return to menu", True, (200, 200, 200))
+        instructions_text = instruction_font.render("Press any key or click to return to menu", True, (255, 255, 255))
         screen.blit(instructions_text, (width // 2 - instructions_text.get_width() // 2, height - 100))
 
         # Draw the custom mouse cursor
