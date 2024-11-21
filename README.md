@@ -44,7 +44,7 @@ This is a classic Pong game built in Python using the `pygame` library. It featu
 
 3. Run the game:
    ```bash
-   python main.py
+   python game.py
    ```
 
 ## Controls

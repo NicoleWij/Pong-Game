@@ -10,9 +10,9 @@ class GameOver:
         self.height = height
         self.custom_mouse = custom_mouse  # Add the custom mouse instance
 
-        # Get the absolute path to the font file
         base_dir = os.path.dirname(__file__)  # Directory of the current script
         font_path = os.path.join(base_dir, "../assets/Extrude.ttf")
+        click_sound_path = os.path.join(base_dir, "../assets/menu.mp3")
 
         self.font = pygame.font.Font(font_path, 64)
         self.options_font = pygame.font.Font(font_path, 34)
@@ -20,6 +20,10 @@ class GameOver:
         
         self.options = ["RESTART GAME", "QUIT"]
         self.clock = pygame.time.Clock()
+
+        # Load the click sound
+        self.click_sound = pygame.mixer.Sound(click_sound_path)
+        self.click_sound.set_volume(0.5)  # Set volume for the click sound
 
     def draw(self, winner, winner_hits, hovered_index=None):
         update_starfield()  # Update star positions
@@ -81,6 +85,7 @@ class GameOver:
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if hovered_index is not None:
-                        return self.options[hovered_index]  # Return the selected option
+                        self.click_sound.play()
+                        return self.options[hovered_index]
 
             self.clock.tick(60)

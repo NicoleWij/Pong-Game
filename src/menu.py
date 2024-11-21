@@ -14,12 +14,17 @@ class Menu:
         # Get the absolute path to the font file
         base_dir = os.path.dirname(__file__)
         font_path = os.path.join(base_dir, "../assets/Extrude.ttf")
+        click_sound_path = os.path.join(base_dir, "../assets/menu.mp3")
 
         self.font = pygame.font.Font(font_path, 64)
         self.hover_font = pygame.font.Font(font_path, 48)
 
         self.options = ["START GAME", "CONTROLS", "QUIT"]
         self.clock = pygame.time.Clock()
+
+        # Load the click sound
+        self.click_sound = pygame.mixer.Sound(click_sound_path)
+        self.click_sound.set_volume(0.5)  # Set volume for the click sound
 
     def draw(self, hovered_index=None):
         update_starfield()
@@ -60,10 +65,11 @@ class Menu:
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if hovered_index is not None:
+                        self.click_sound.play()
                         if self.options[hovered_index] == "START GAME":
                             return "START GAME"
                         elif self.options[hovered_index] == "CONTROLS":
-                            show_controls(self.screen, self.clock, self.width, self.height)
+                            show_controls(self.screen, self.clock, self.width, self.height, self.custom_mouse)
                         elif self.options[hovered_index] == "QUIT":
                             pygame.quit()
                             sys.exit()

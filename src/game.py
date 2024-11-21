@@ -21,11 +21,28 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("PONG")
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("Arial", FONT_SIZE)
+pygame.mixer.init()
 
-# Initialize custom mouse cursor
+# Initialize custom mouse cursor & audio
 base_dir = os.path.dirname(__file__)
-cursor_path = os.path.join(base_dir, "../assets/star_cursor.xpm")  # Use the .xpm file
-custom_mouse = Mouse(base_dir, "../assets/star_cursor.xpm")  # Pass directory and filename to Mouse
+cursor_path = os.path.join(base_dir, "../assets/star_cursor.xpm")
+music_path = os.path.join(base_dir, "../assets/background.mp3")
+ball_sound_path = os.path.join(base_dir, "../assets/ball.mp3")
+game_over_path = os.path.join(base_dir, "../assets/game_over.mp3")
+
+custom_mouse = Mouse(base_dir, "../assets/star_cursor.xpm")
+
+# Load and set up background music
+pygame.mixer.music.load(music_path)
+pygame.mixer.music.set_volume(0.5)
+
+# Load and set up the ball hit sound effect
+ball_sound = pygame.mixer.Sound(ball_sound_path)
+ball_sound.set_volume(0.15)
+
+# Load and set up the game over sound effect
+game_over_sound = pygame.mixer.Sound(game_over_path)
+game_over_sound.set_volume(1)
 
 # Initialize Menu and GameOver with the custom mouse
 menu = Menu(screen, WIDTH, HEIGHT, custom_mouse)
@@ -56,14 +73,18 @@ def game_loop():
 
         # Check for collisions and update hit counters
         if paddle1.handle_collision(ball, pygame.K_w, pygame.K_s):
+            ball_sound.play()
             player1_hits += 1
         elif paddle2.handle_collision(ball, pygame.K_UP, pygame.K_DOWN):
+            ball_sound.play()
             player2_hits += 1
 
         # Check for losing condition (ball out of bounds)
         if ball.rect.left <= 0:
+            game_over_sound.play()
             return "Player 2", player2_hits  # Player 2 wins, return their hits
         elif ball.rect.right >= WIDTH:
+            game_over_sound.play()
             return "Player 1", player1_hits  # Player 1 wins, return their hits
 
         # Draw everything
@@ -83,6 +104,10 @@ def game_loop():
 
 def main():
     """Main entry point for the PONG game."""
+    # Play background music on a loop
+    pygame.mixer.music.set_volume(0.5)  # Set volume (0.0 to 1.0)
+    pygame.mixer.music.play(-1)  # -1 means loop indefinitely
+    
     while True:
         # Display the main menu and get the user's choice
         choice = menu.get_choice()
