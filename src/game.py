@@ -1,134 +1,73 @@
 import pygame
 import sys
-import os
 from paddle import Paddle
 from ball import Ball
-from menu import Menu
-from game_over import GameOver
 from starfield import update_starfield, draw_starfield
 from mouse import Mouse
 
-pygame.init()
+class PongGame:
+    def __init__(self, screen, clock, custom_mouse, ball_sound, game_over_sound):
+        self.screen = screen
+        self.clock = clock
+        self.custom_mouse = custom_mouse
+        self.ball_sound = ball_sound
+        self.game_over_sound = game_over_sound
 
-# Constants
-WIDTH, HEIGHT = 800, 600
-PADDLE_WIDTH, PADDLE_HEIGHT = 10, 100
-BALL_SIZE = 15
-FONT_SIZE = 36
+        # Constants
+        self.WIDTH, self.HEIGHT = 800, 600
+        self.PADDLE_WIDTH, self.PADDLE_HEIGHT = 10, 100
+        self.BALL_SIZE = 15
 
-# Setup
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("PONG")
-clock = pygame.time.Clock()
-font = pygame.font.SysFont("Arial", FONT_SIZE)
-pygame.mixer.init()
+    def game_loop(self):
+        """Main game loop for PONG."""
+        paddle1 = Paddle(10, (self.HEIGHT - self.PADDLE_HEIGHT) // 2, self.PADDLE_WIDTH, self.PADDLE_HEIGHT, self.HEIGHT)
+        paddle2 = Paddle(self.WIDTH - 20, (self.HEIGHT - self.PADDLE_HEIGHT) // 2, self.PADDLE_WIDTH, self.PADDLE_HEIGHT, self.HEIGHT)
+        ball = Ball(self.WIDTH // 2 - self.BALL_SIZE // 2, self.HEIGHT // 2 - self.BALL_SIZE // 2, self.BALL_SIZE, 5, 5, self.WIDTH, self.HEIGHT)
 
-# Initialize custom mouse cursor & audio
-base_dir = os.path.dirname(__file__)
-cursor_path = os.path.join(base_dir, "../assets/star_cursor.xpm")
-music_path = os.path.join(base_dir, "../assets/background.mp3")
-ball_sound_path = os.path.join(base_dir, "../assets/ball.mp3")
-game_over_path = os.path.join(base_dir, "../assets/game_over.mp3")
+        player1_hits = 0
+        player2_hits = 0
 
-custom_mouse = Mouse(base_dir, "../assets/star_cursor.xpm")
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
 
-# Load and set up background music
-pygame.mixer.music.load(music_path)
-pygame.mixer.music.set_volume(0.5)
+            # Update
+            update_starfield()
 
-# Load and set up the ball hit sound effect
-ball_sound = pygame.mixer.Sound(ball_sound_path)
-ball_sound.set_volume(0.3)
+            # Move paddles and ball
+            paddle1.move(pygame.K_w, pygame.K_s, 5)
+            paddle2.move(pygame.K_UP, pygame.K_DOWN, 5)
+            ball.move()
 
-# Load and set up the game over sound effect
-game_over_sound = pygame.mixer.Sound(game_over_path)
-game_over_sound.set_volume(1)
+            # Check for collisions and update hit counters
+            if paddle1.handle_collision(ball, pygame.K_w, pygame.K_s):
+                self.ball_sound.play()
+                player1_hits += 1
+            elif paddle2.handle_collision(ball, pygame.K_UP, pygame.K_DOWN):
+                self.ball_sound.play()
+                player2_hits += 1
 
-# Initialize Menu and GameOver with the custom mouse
-menu = Menu(screen, WIDTH, HEIGHT, custom_mouse)
-game_over_screen = GameOver(screen, WIDTH, HEIGHT, custom_mouse)
+            # Check for losing condition (ball out of bounds)
+            if ball.rect.left <= 0:
+                self.game_over_sound.play()
+                return "Player 2", player2_hits  # Player 2 wins, return their hits
+            elif ball.rect.right >= self.WIDTH:
+                self.game_over_sound.play()
+                return "Player 1", player1_hits  # Player 1 wins, return their hits
 
-def game_loop():
-    """Main game loop for PONG."""
-    # Initialize paddles, ball, and hit counters
-    paddle1 = Paddle(10, (HEIGHT - PADDLE_HEIGHT) // 2, PADDLE_WIDTH, PADDLE_HEIGHT, HEIGHT)
-    paddle2 = Paddle(WIDTH - 20, (HEIGHT - PADDLE_HEIGHT) // 2, PADDLE_WIDTH, PADDLE_HEIGHT, HEIGHT)
-    ball = Ball(WIDTH // 2 - BALL_SIZE // 2, HEIGHT // 2 - BALL_SIZE // 2, BALL_SIZE, 5, 5, WIDTH, HEIGHT)
-    player1_hits = 0
-    player2_hits = 0
+            # Draw everything
+            self.screen.fill((0, 0, 0))  # Clear the screen
+            draw_starfield(self.screen)  # Draw the scrolling starfield
+            paddle1.draw(self.screen)
+            paddle2.draw(self.screen)
+            ball.draw(self.screen)
 
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+            # Draw custom mouse cursor
+            self.custom_mouse.draw(self.screen)
 
-        # Update
-        update_starfield()
+            pygame.display.flip()  # Update the display
 
-        # Move paddles and ball
-        paddle1.move(pygame.K_w, pygame.K_s, 5)
-        paddle2.move(pygame.K_UP, pygame.K_DOWN, 5)
-        ball.move()
-
-        # Check for collisions and update hit counters
-        if paddle1.handle_collision(ball, pygame.K_w, pygame.K_s):
-            ball_sound.play()
-            player1_hits += 1
-        elif paddle2.handle_collision(ball, pygame.K_UP, pygame.K_DOWN):
-            ball_sound.play()
-            player2_hits += 1
-
-        # Check for losing condition (ball out of bounds)
-        if ball.rect.left <= 0:
-            game_over_sound.play()
-            return "Player 2", player2_hits  # Player 2 wins, return their hits
-        elif ball.rect.right >= WIDTH:
-            game_over_sound.play()
-            return "Player 1", player1_hits  # Player 1 wins, return their hits
-
-        # Draw everything
-        screen.fill((0, 0, 0))  # Clear the screen
-        draw_starfield(screen)  # Draw the scrolling starfield
-        paddle1.draw(screen)
-        paddle2.draw(screen)
-        ball.draw(screen)
-
-        # Draw custom mouse cursor
-        custom_mouse.draw(screen)
-
-        pygame.display.flip()  # Update the display
-
-        # Control frame rate
-        clock.tick(60)
-
-def main():
-    """Main entry point for the PONG game."""
-    # Play background music on a loop
-    pygame.mixer.music.set_volume(0.5)  # Set volume (0.0 to 1.0)
-    pygame.mixer.music.play(-1)  # -1 means loop indefinitely
-    
-    while True:
-        # Display the main menu and get the user's choice
-        choice = menu.get_choice()
-        
-        if choice == "START GAME":
-            # Start the game loop and get the game results
-            winner, winner_hits = game_loop()
-
-            # Display the Game Over screen
-            game_over_choice = game_over_screen.get_choice(winner, winner_hits)
-            
-            if game_over_choice == "RESTART GAME":
-                continue  # Restart the loop, showing the main menu again
-            elif game_over_choice == "QUIT":
-                pygame.quit()
-                sys.exit()
-        
-        elif choice == "QUIT":
-            # Quit the game if the user selects Quit
-            pygame.quit()
-            sys.exit()
-
-if __name__ == "__main__":
-    main()
+            # Control frame rate
+            self.clock.tick(60)

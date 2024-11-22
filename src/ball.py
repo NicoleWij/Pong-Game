@@ -12,7 +12,7 @@ class Ball:
         # Randomize direction for both x and y speeds
         self.speed_x = speed_x if random.choice([True, False]) else -speed_x
         self.speed_y = speed_y if random.choice([True, False]) else -speed_y
-        
+            
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.image = pygame.image.load(star_path)  # Load the star image

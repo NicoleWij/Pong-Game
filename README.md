@@ -44,7 +44,7 @@ This is a classic Pong game built in Python using the `pygame` library. It featu
 
 3. Run the game:
    ```bash
-   python game.py
+   python main.py
    ```
 
 ## Controls
@@ -65,6 +65,7 @@ pong-game-python/
 │   ├── controls.py      # Displays the controls screen and animations
 │   ├── game.py          # Main game loop and overall logic
 │   ├── game_over.py     # GameOver screen functionality
+│   ├── main.py          # Main file
 │   ├── menu.py          # Main menu and navigation options
 │   ├── mouse.py         # Custom mouse cursor behavior
 │   ├── paddle.py        # Paddle behavior, movement, and collision
